@@ -1,9 +1,10 @@
 package com.awesome.domains.ProjectTask.entities;
 
-import com.awesome.domains.Project.enums.TaskType;
+import com.awesome.domains.ProjectTask.enums.TaskType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -13,6 +14,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
+@ToString
 @Table(name = "project_task")
 public class ProjectTaskEntity {
     /**
@@ -69,19 +71,4 @@ public class ProjectTaskEntity {
 
     @Column(nullable = true, name = "updated_at")
     private LocalDateTime updatedAt;
-
-    @Override
-    public String toString() {
-        return "ProjectTask { id: " + id
-                + ", projectId: " + projectId
-                + ", parentTaskId: " + parentTaskId
-                + ", summary: " + summary
-                + ", taskStartDate: " + taskStartDate
-                + ", taskEndDate: " + taskEndDate
-                + ", persons: " + persons
-                + ", type: " + type
-                + ", createdAt: " + createdAt
-                + ", updatedAt: " + updatedAt
-                + " }";
-    }
 }

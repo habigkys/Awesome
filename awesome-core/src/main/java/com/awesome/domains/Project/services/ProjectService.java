@@ -2,14 +2,12 @@ package com.awesome.domains.Project.services;
 
 import com.awesome.domains.Project.entities.ProjectEntity;
 import com.awesome.domains.Project.entities.ProjectDAO;
-import com.awesome.domains.ProjectTask.entities.ProjectTaskEntity;
-import com.awesome.domains.ProjectTask.entities.ProjectTaskDAO;
-import com.awesome.domains.ProjectTask.services.ProjectTaskDTO;
+import com.awesome.domains.Project.enums.ProjectStatus;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -55,13 +53,16 @@ public class ProjectService {
      * @return
      */
     public ProjectDTO createProject(ProjectDTO projectDto){
-        if(!isCorrectProjectDate(projectDto)) {
+        // 시작일, 종료일 Validate
+        if(!validateProjectDate(projectDto)) {
             // todo
+            throw new IllegalArgumentException();
         }
 
         ProjectEntity toCreateProjectEntity = new ProjectEntity();
         toCreateProjectEntity.setProjectName(projectDto.getProjectName());
         toCreateProjectEntity.setSummary(projectDto.getSummary());
+        toCreateProjectEntity.setStatus(projectDto.getStatus());
         toCreateProjectEntity.setStartDate(projectDto.getStartDate());
         toCreateProjectEntity.setEndDate(projectDto.getEndDate());
         toCreateProjectEntity.setCreatedAt(LocalDateTime.now());
@@ -76,15 +77,31 @@ public class ProjectService {
      * @return
      */
     public ProjectDTO updateProject(ProjectDTO projectDto){
-        if(!isCorrectProjectDate(projectDto)) {
+        // 시작일, 종료일 Validate
+        if(!validateProjectDate(projectDto)) {
             // todo
+            throw new IllegalArgumentException();
         }
 
         Optional<ProjectEntity> byId = projectDAO.findById(projectDto.getId());
 
         ProjectEntity toUpdateOne = byId.get();
+
+        // 프로젝트 상태의 변경이 일어났을 때 처리
+        if(!toUpdateOne.getStatus().equals(projectDto.getStatus())){
+            // TODO 상태가 아닌 프로젝트를 CLOSE하려고 할 때
+            if(projectDto.getStatus().equals(ProjectStatus.CLOSED) && !toUpdateOne.getStatus().equals(ProjectStatus.TODO)){
+                // 프로젝트 생성일부터 현재까지 1주일 미만일 때 변경 불가
+                if(ChronoUnit.WEEKS.between(toUpdateOne.getCreatedAt(), LocalDateTime.now()) < 1){
+                    // todo
+                    throw new IllegalArgumentException();
+                }
+            }
+        }
+
         toUpdateOne.setProjectName(projectDto.getProjectName());
         toUpdateOne.setSummary(projectDto.getSummary());
+        toUpdateOne.setStatus(projectDto.getStatus());
         toUpdateOne.setStartDate(projectDto.getStartDate());
         toUpdateOne.setEndDate(projectDto.getEndDate());
         toUpdateOne.setUpdatedAt(LocalDateTime.now());
@@ -105,7 +122,7 @@ public class ProjectService {
      * @param projectDto
      * @return
      */
-    private boolean isCorrectProjectDate(ProjectDTO projectDto) {
+    private boolean validateProjectDate(ProjectDTO projectDto) {
         return projectDto.getEndDate().isAfter(projectDto.getStartDate());
     }
 }

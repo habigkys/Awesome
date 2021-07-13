@@ -1,15 +1,11 @@
 package com.awesome.domains.ProjectTask.services;
 
-import com.awesome.domains.Project.entities.ProjectDAO;
-import com.awesome.domains.Project.entities.ProjectEntity;
-import com.awesome.domains.Project.services.ProjectDTO;
 import com.awesome.domains.ProjectTask.entities.ProjectTaskDAO;
 import com.awesome.domains.ProjectTask.entities.ProjectTaskEntity;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -56,8 +52,10 @@ public class ProjectTaskService {
      * @return
      */
     public ProjectTaskDTO createProjectTask(ProjectTaskDTO projectTaskDto, Long projectId){
-        if(!isCorrectProjectTaskDate(projectTaskDto)) {
+        // 시작일, 종료일 Validate
+        if(!validateProjectTaskDate(projectTaskDto)) {
             // todo
+            throw new IllegalArgumentException();
         }
 
         ProjectTaskEntity toCreateProjectTaskEntity = new ProjectTaskEntity();
@@ -81,8 +79,10 @@ public class ProjectTaskService {
      * @return
      */
     public ProjectTaskDTO updateProjectTask(ProjectTaskDTO projectTaskDto){
-        if(!isCorrectProjectTaskDate(projectTaskDto)) {
+        // 시작일, 종료일 Validate
+        if(!validateProjectTaskDate(projectTaskDto)) {
             // todo
+            throw new IllegalArgumentException();
         }
 
         Optional<ProjectTaskEntity> byId = projectTaskDAO.findById(projectTaskDto.getId());
@@ -111,7 +111,7 @@ public class ProjectTaskService {
      * @param projectTaskDto
      * @return
      */
-    private boolean isCorrectProjectTaskDate(ProjectTaskDTO projectTaskDto) {
+    private boolean validateProjectTaskDate(ProjectTaskDTO projectTaskDto) {
         return projectTaskDto.getTaskEndDate().isAfter(projectTaskDto.getTaskStartDate());
     }
 }

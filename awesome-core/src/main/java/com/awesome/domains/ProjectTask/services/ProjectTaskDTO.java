@@ -1,7 +1,7 @@
 package com.awesome.domains.ProjectTask.services;
 
 import com.awesome.domains.ProjectTask.entities.ProjectTaskEntity;
-import com.awesome.domains.Project.enums.TaskType;
+import com.awesome.domains.ProjectTask.enums.TaskType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

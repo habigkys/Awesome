@@ -1,8 +1,10 @@
 package com.awesome.domains.Project.entities;
 
+import com.awesome.domains.Project.enums.ProjectStatus;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -12,6 +14,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Entity
+@ToString
 @Table(name = "project")
 public class ProjectEntity {
 
@@ -32,6 +35,12 @@ public class ProjectEntity {
     private String summary;
 
     /**
+     * 프로젝트 상태 : TODO,OPEN,PROGRESS,DONE,CLOSED
+     */
+    @Column(nullable = false, name = "status")
+    private ProjectStatus status;
+
+    /**
      * 프로젝트 시작 시간
      */
     @Column(nullable = false, name = "start_date")
@@ -48,16 +57,4 @@ public class ProjectEntity {
 
     @Column(nullable = true, name = "updated_at")
     private LocalDateTime updatedAt;
-
-    @Override
-    public String toString() {
-        return "Project { id: " + id
-                + ", projectName: " + projectName
-                + ", summary: " + summary
-                + ", startDate: " + startDate
-                + ", endDate: " + endDate
-                + ", createdAt: " + createdAt
-                + ", updatedAt: " + updatedAt
-                + " }";
-    }
 }

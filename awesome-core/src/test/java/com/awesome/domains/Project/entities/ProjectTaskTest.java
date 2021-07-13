@@ -1,6 +1,6 @@
 package com.awesome.domains.Project.entities;
 
-import com.awesome.domains.Project.enums.TaskType;
+import com.awesome.domains.ProjectTask.enums.TaskType;
 import com.awesome.domains.ProjectTask.entities.ProjectTaskDAO;
 import com.awesome.domains.ProjectTask.entities.ProjectTaskEntity;
 import org.apache.commons.collections.CollectionUtils;

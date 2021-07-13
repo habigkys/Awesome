@@ -1,4 +1,4 @@
-package com.awesome.domains.Project.enums;
+package com.awesome.domains.ProjectTask.enums;
 
 /**
  * Scope
